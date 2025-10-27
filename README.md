@@ -30,6 +30,8 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai)](https://openai.com)
 [![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com)
 
+<img width="1662" height="965" alt="Screenshot 2025-10-27 at 11 18 28 AM" src="https://github.com/user-attachments/assets/a869e1e4-bd96-4a00-b627-8422fe37f1c2" />
+
 <img width="743" height="556" alt="Screenshot 2025-10-27 at 10 33 26 AM" src="https://github.com/user-attachments/assets/cacca0f9-e39a-46ce-b13f-ecb664ec1233" />
 <img width="1476" height="776" alt="Screenshot 2025-10-27 at 10 31 59 AM" src="https://github.com/user-attachments/assets/22d39fea-57a0-4218-9219-7a8b6a60463a" />
 
