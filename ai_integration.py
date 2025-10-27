@@ -15,7 +15,7 @@ import openai
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv('.env')
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,10 +57,10 @@ class AICore:
         """Load AI configuration"""
         if self.config_path.exists():
             with open(self.config_path, 'r') as f:
-                return json.load(f)
+                config = json.load(f)
         else:
             # Create default config
-            default_config = {
+            config = {
                 'claude_model': os.getenv('CLAUDE_MODEL', 'claude-sonnet-4-20250514'),
                 'openai_model': os.getenv('OPENAI_MODEL', 'gpt-4-turbo-preview'),
                 'default_ai': os.getenv('DEFAULT_AI', 'claude'),
@@ -70,9 +70,22 @@ class AICore:
             
             self.config_path.parent.mkdir(exist_ok=True, parents=True)
             with open(self.config_path, 'w') as f:
-                json.dump(default_config, f, indent=2)
-            
-            return default_config
+                json.dump(config, f, indent=2)
+        
+        # Auto-detect which AI provider to use based on available keys
+        claude_key = os.getenv('ANTHROPIC_API_KEY')
+        openai_key = os.getenv('OPENAI_API_KEY')
+        
+        if not claude_key and openai_key:
+            # Only OpenAI is available
+            config['default_ai'] = 'openai'
+            logger.info("Auto-selected OpenAI as default AI provider")
+        elif claude_key and not openai_key:
+            # Only Claude is available
+            config['default_ai'] = 'claude'
+            logger.info("Auto-selected Claude as default AI provider")
+        
+        return config
     
     def save_config(self):
         """Save AI configuration"""
