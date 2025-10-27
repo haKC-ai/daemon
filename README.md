@@ -180,7 +180,7 @@ The barriers to creating autonomous AI systems are **no longer technical**. They
 
 ---
 
-## 🤖 AI-Powered Capabilities
+## AI-Powered Capabilities
 
 ### Natural Language Trigger Creation
 
@@ -357,19 +357,21 @@ graph TD
 ![Progress](https://img.shields.io/badge/Status-Installs%20dependencies-success.svg)
 ![Progress](https://img.shields.io/badge/Status-Ready%20to%20run-success.svg)
 
+
+
 ### Step 2: Configure AI APIs
 
-![Required](https://img.shields.io/badge/Required-At%20least%20one%20API-critical.svg)
+**You must configure at least one AI API to enable autonomous features.**
 
-**Get API Keys:**
-- Claude: https://console.anthropic.com/
-- OpenAI: https://platform.openai.com/
+See `API_SETUP.md` for detailed instructions.
 
-**Set Environment Variables:**
+Quick setup:
+
 ```bash
 export ANTHROPIC_API_KEY="your-claude-api-key"
 export OPENAI_API_KEY="your-openai-api-key"
 ```
+
 
 ![Cost](https://img.shields.io/badge/Cost-~%245--20%2Fmonth-blue.svg)
 
