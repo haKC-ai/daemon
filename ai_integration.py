@@ -63,9 +63,9 @@ class AICore:
             config = {
                 'claude_model': os.getenv('CLAUDE_MODEL', 'claude-sonnet-4-20250514'),
                 'openai_model': os.getenv('OPENAI_MODEL', 'gpt-4-turbo-preview'),
-                'default_ai': os.getenv('DEFAULT_AI', 'claude'),
+                'default_ai': os.getenv('DEFAULT_AI', 'openai'),
                 'temperature': float(os.getenv('AI_TEMPERATURE', '0.7')),
-                'max_tokens': int(os.getenv('AI_MAX_TOKENS', '4096'))
+                'max_completion_tokens': int(os.getenv('AI_MAX_TOKENS', '4096'))
             }
             
             self.config_path.parent.mkdir(exist_ok=True, parents=True)
