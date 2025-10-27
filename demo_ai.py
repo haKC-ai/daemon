@@ -37,6 +37,7 @@ banner = r"""
 ..-.-.-.-...   ........    ...    ...           .                .. -. -.--..-.  ... ..------+----+-
 """
 print (fade.purplepink(banner))
+
 async def demonstrate_ai_capabilities():
     """Demonstrate the AI-powered autonomous capabilities"""
     
@@ -52,13 +53,16 @@ async def demonstrate_ai_capabilities():
     print(f"[OK] System initialized with {len(daemon.operatives)} operatives\n")
     
     # Check if AI is configured
-    if not daemon.ai_core.claude_client and not daemon.ai_core.openai_client:
+    if not daemon.ai_core.claude_client and not daemon.ai_core.openai_key:
         print("[WARNING] No AI API keys configured!")
         print("Please set ANTHROPIC_API_KEY or OPENAI_API_KEY environment variables")
         print("See API_SETUP.md for details\n")
         return
     
-    print("[OK] AI systems operational\n")
+    if daemon.ai_core.claude_client:
+        print("[OK] AI systems operational (Claude)\n")
+    elif daemon.ai_core.openai_key:
+        print("[OK] AI systems operational (OpenAI)\n")
     
     # Demonstration 1: Natural Language Trigger Creation
     print("-" * 80)
