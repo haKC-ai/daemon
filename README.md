@@ -269,38 +269,84 @@ Before activation, AI automatically checks:
 | **trigger_analyzer.py** | NLP parsing | AI-powered |
 | **decision_engine.py** | Strategic planning | AI-powered |
 
-### System Workflow
+## Architecture
+
+The system consists of three main components:
+
+1. **Daemon Core** (`daemon_core.py`): The autonomous backend that monitors triggers, manages operatives, and executes actions
+2. **AI Integration** (`ai_integration.py`): Claude and OpenAI API integration for autonomous intelligence
+3. **Web Interface** (`web_interface.py`): Flask-based frontend for operative interaction
+
+## System Workflow
 
 ```mermaid
 graph TD
-    A[User: Natural Language Trigger] --> B[AI: Parse & Structure]
-    B --> C[AI: Safety Validation]
-    C -->|Approved| D[Create Trigger]
-    C -->|Rejected| E[Return Reasoning]
-    D --> F[Continuous Monitoring]
+    A[Daemon Core Initialization] --> B[Load Persisted State]
+    B --> C[Initialize AI Systems]
+    C --> D[Trigger Monitoring Loop]
     
-    F --> G{Condition Met?}
-    G -->|No| F
-    G -->|Yes| H[AI: Generate Actions]
-    H --> I[Execute Autonomously]
-    I --> J[Log & Learn]
-    J --> F
+    D --> E{Check Triggers}
+    E -->|Time-based| F[Evaluate Time Condition]
+    E -->|Event-based| G[Evaluate Event Condition]
+    E -->|Condition-based| H[Evaluate General Condition]
+    E -->|AI Decision| I[Query AI for Evaluation]
     
-    K[Network Context] --> L[AI: Analyze State]
-    L --> M[Generate Quests]
-    M --> N[Assign to Operatives]
-    N --> O[Monitor Completion]
-    O --> P[AI: Evaluate Quality]
-    P --> Q[Grant Rewards]
-    Q --> K
+    F --> J{Condition Met?}
+    G --> J
+    H --> J
+    I --> K[AI Analysis]
+    K --> J
     
-    style B fill:#00ff00,stroke:#000,color:#000
+    J -->|Yes| L[Execute Action]
+    J -->|No| D
+    
+    L --> M[Query AI for Actions]
+    M --> N[Generate Action Plan]
+    N --> O[Execute Actions]
+    O --> P[Log Decision]
+    P --> Q[Update State]
+    Q --> D
+    
+    R[User: Natural Language Trigger] --> S[AI Parse Trigger]
+    S --> T[AI Safety Validation]
+    T -->|Approved| U[Create Structured Trigger]
+    T -->|Rejected| V[Reject with Reasoning]
+    U --> W[Store Trigger]
+    W --> D
+    
+    X[Request: Generate Quest] --> Y[Analyze Network Context]
+    Y --> Z[AI Quest Generation]
+    Z --> AA[Create Quest]
+    AA --> Q
+    
+    AB[Web Interface] --> AC[Operative Recruitment]
+    AC --> AD[Generate Darknet Identity]
+    AD --> AE[Store Encrypted Credentials]
+    AE --> AF[Create Operative Profile]
+    
+    AB --> AG[Operative Login]
+    AG --> AH[Authenticate Credentials]
+    AH --> AI[Load Operative Dashboard]
+    
+    AI --> AJ[View Available Quests]
+    AJ --> AK[Accept Quest]
+    AK --> AL[Update Quest Status]
+    AL --> AM[Complete Quest]
+    AM --> AN[AI Evaluation Optional]
+    AN --> AO[Grant Rewards]
+    AO --> AP[Update Reputation & Rank]
+    AP --> Q
+    
+    AF --> Q
+    Q --> B
+    
+    style I fill:#00ff00,stroke:#000,color:#000
+    style M fill:#00ff00,stroke:#000,color:#000
+    style S fill:#00ff00,stroke:#000,color:#000
+    style Z fill:#00ff00,stroke:#000,color:#000
+    style AN fill:#00ff00,stroke:#000,color:#000
     style C fill:#ffaa00,stroke:#000,color:#000
-    style H fill:#00ff00,stroke:#000,color:#000
-    style L fill:#00ff00,stroke:#000,color:#000
-    style P fill:#00ff00,stroke:#000,color:#000
 ```
-
 ---
 
 ## Features
@@ -711,84 +757,7 @@ This project is meant to spark informed discussion about:
 **Let's talk about this responsibly.**
 
 
-## Architecture
 
-The system consists of three main components:
-
-1. **Daemon Core** (`daemon_core.py`): The autonomous backend that monitors triggers, manages operatives, and executes actions
-2. **AI Integration** (`ai_integration.py`): Claude and OpenAI API integration for autonomous intelligence
-3. **Web Interface** (`web_interface.py`): Flask-based frontend for operative interaction
-
-## System Workflow
-
-```mermaid
-graph TD
-    A[Daemon Core Initialization] --> B[Load Persisted State]
-    B --> C[Initialize AI Systems]
-    C --> D[Trigger Monitoring Loop]
-    
-    D --> E{Check Triggers}
-    E -->|Time-based| F[Evaluate Time Condition]
-    E -->|Event-based| G[Evaluate Event Condition]
-    E -->|Condition-based| H[Evaluate General Condition]
-    E -->|AI Decision| I[Query AI for Evaluation]
-    
-    F --> J{Condition Met?}
-    G --> J
-    H --> J
-    I --> K[AI Analysis]
-    K --> J
-    
-    J -->|Yes| L[Execute Action]
-    J -->|No| D
-    
-    L --> M[Query AI for Actions]
-    M --> N[Generate Action Plan]
-    N --> O[Execute Actions]
-    O --> P[Log Decision]
-    P --> Q[Update State]
-    Q --> D
-    
-    R[User: Natural Language Trigger] --> S[AI Parse Trigger]
-    S --> T[AI Safety Validation]
-    T -->|Approved| U[Create Structured Trigger]
-    T -->|Rejected| V[Reject with Reasoning]
-    U --> W[Store Trigger]
-    W --> D
-    
-    X[Request: Generate Quest] --> Y[Analyze Network Context]
-    Y --> Z[AI Quest Generation]
-    Z --> AA[Create Quest]
-    AA --> Q
-    
-    AB[Web Interface] --> AC[Operative Recruitment]
-    AC --> AD[Generate Darknet Identity]
-    AD --> AE[Store Encrypted Credentials]
-    AE --> AF[Create Operative Profile]
-    
-    AB --> AG[Operative Login]
-    AG --> AH[Authenticate Credentials]
-    AH --> AI[Load Operative Dashboard]
-    
-    AI --> AJ[View Available Quests]
-    AJ --> AK[Accept Quest]
-    AK --> AL[Update Quest Status]
-    AL --> AM[Complete Quest]
-    AM --> AN[AI Evaluation Optional]
-    AN --> AO[Grant Rewards]
-    AO --> AP[Update Reputation & Rank]
-    AP --> Q
-    
-    AF --> Q
-    Q --> B
-    
-    style I fill:#00ff00,stroke:#000,color:#000
-    style M fill:#00ff00,stroke:#000,color:#000
-    style S fill:#00ff00,stroke:#000,color:#000
-    style Z fill:#00ff00,stroke:#000,color:#000
-    style AN fill:#00ff00,stroke:#000,color:#000
-    style C fill:#ffaa00,stroke:#000,color:#000
-```
 
 ## Features
 
