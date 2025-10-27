@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAEMON - OPERATIVE DASHBOARD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .logout-btn {
+            padding: 10px 20px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        .panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .panel h2 {
+            margin-bottom: 20px;
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
+        .stat-label {
+            color: #00ff00;
+        }
+        
+        .stat-value {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .quest-card {
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+            background: rgba(0, 255, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .quest-card:hover {
+            background: rgba(0, 255, 0, 0.15);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+        
+        .quest-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: #00ff00;
+        }
+        
+        .quest-description {
+            margin: 10px 0;
+            color: #88ff88;
+        }
+        
+        .quest-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .difficulty {
+            color: #ffaa00;
+        }
+        
+        .reward {
+            color: #00ffff;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .network-status {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        
+        .network-stat {
+            flex: 1;
+        }
+        
+        .network-stat-value {
+            font-size: 2em;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .network-stat-label {
+            color: #88ff88;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>DAEMON.NET</h1>
+            <p>OPERATIVE: {{ operative.darknet_name }}</p>
+        </div>
+        <div>
+            {% if operative.rank >= 3 %}
+            <a href="/triggers" class="logout-btn">TRIGGERS</a>
+            {% endif %}
+            <a href="/logout" class="logout-btn">DISCONNECT</a>
+        </div>
+    </div>
+    
+    <div class="dashboard">
+        <div class="panel">
+            <h2>OPERATIVE PROFILE</h2>
+            <div class="stat-row">
+                <span class="stat-label">DARKNET NAME:</span>
+                <span class="stat-value">{{ operative.darknet_name }}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">RANK:</span>
+                <span class="stat-value">{{ operative.rank }}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">REPUTATION:</span>
+                <span class="stat-value">{{ operative.reputation }}</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">STATUS:</span>
+                <span class="stat-value">ACTIVE</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">QUESTS COMPLETED:</span>
+                <span class="stat-value">{{ operative.completed_quests|length }}</span>
+            </div>
+            
+            <h2 style="margin-top: 30px;">SKILLS</h2>
+            <div style="margin-top: 10px;">
+                {% for skill in operative.skills %}
+                <div class="stat-row">
+                    <span class="stat-value">{{ skill.upper() }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div>
+            <div class="panel">
+                <h2>QUEST MANAGEMENT</h2>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('available')">AVAILABLE</button>
+                    <button class="tab" onclick="switchTab('active')">ACTIVE</button>
+                    <button class="tab" onclick="switchTab('completed')">COMPLETED</button>
+                </div>
+                
+                <div id="available" class="tab-content active"></div>
+                <div id="active" class="tab-content"></div>
+                <div id="completed" class="tab-content"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="network-status">
+        <div class="network-stat">
+            <div class="network-stat-value" id="total-operatives">0</div>
+            <div class="network-stat-label">TOTAL OPERATIVES</div>
+        </div>
+        <div class="network-stat">
+            <div class="network-stat-value" id="active-operatives">0</div>
+            <div class="network-stat-label">ACTIVE OPERATIVES</div>
+        </div>
+        <div class="network-stat">
+            <div class="network-stat-value" id="completed-quests">0</div>
+            <div class="network-stat-label">COMPLETED QUESTS</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentTab = 'available';
+        
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            currentTab = tabName;
+        }
+        
+        async function loadQuests() {
+            try {
+                const response = await fetch('/api/quests');
+                const data = await response.json();
+                
+                displayQuests('available', data.available);
+                displayQuests('active', data.active);
+                displayQuests('completed', data.completed);
+            } catch (error) {
+                console.error('Error loading quests:', error);
+            }
+        }
+        
+        function displayQuests(category, quests) {
+            const container = document.getElementById(category);
+            
+            if (quests.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 20px;">No quests in this category.</p>';
+                return;
+            }
+            
+            container.innerHTML = quests.map(quest => `
+                <div class="quest-card">
+                    <div class="quest-title">${quest.title}</div>
+                    <div class="quest-description">${quest.description}</div>
+                    <div class="quest-meta">
+                        <span class="difficulty">DIFFICULTY: ${quest.difficulty}</span>
+                        <span class="reward">REWARD: ${quest.rewards.reputation} REP</span>
+                    </div>
+                    ${category === 'available' ? `
+                        <button class="btn" onclick="acceptQuest('${quest.quest_id}')">ACCEPT QUEST</button>
+                    ` : ''}
+                    ${category === 'active' ? `
+                        <button class="btn" onclick="completeQuest('${quest.quest_id}')">COMPLETE QUEST</button>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        async function acceptQuest(questId) {
+            try {
+                const response = await fetch(`/api/quest/${questId}/accept`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Quest accepted successfully!');
+                    loadQuests();
+                } else {
+                    alert('Failed to accept quest: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function completeQuest(questId) {
+            try {
+                const response = await fetch(`/api/quest/${questId}/complete`, {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('Quest completed! Rewards granted.');
+                    loadQuests();
+                    location.reload();
+                } else {
+                    alert('Failed to complete quest: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function loadNetworkStatus() {
+            try {
+                const response = await fetch('/api/network/status');
+                const data = await response.json();
+                
+                document.getElementById('total-operatives').textContent = data.total_operatives;
+                document.getElementById('active-operatives').textContent = data.active_operatives;
+                document.getElementById('completed-quests').textContent = data.completed_quests;
+            } catch (error) {
+                console.error('Error loading network status:', error);
+            }
+        }
+        
+        loadQuests();
+        loadNetworkStatus();
+        
+        setInterval(loadNetworkStatus, 30000);
+    </script>
+</body>
+</html>

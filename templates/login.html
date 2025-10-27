@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAEMON - OPERATIVE ACCESS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+        
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .message.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
+        
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #00ff00;
+            text-decoration: none;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OPERATIVE ACCESS</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="operative_id">OPERATIVE ID:</label>
+                <input type="text" id="operative_id" name="operative_id" required 
+                       placeholder="Enter your operative identifier">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">AUTHENTICATION KEY:</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Enter your passphrase">
+            </div>
+            
+            <button type="submit" class="btn">AUTHENTICATE</button>
+        </form>
+        
+        <a href="/" class="back-link">&lt; RETURN TO MAIN</a>
+    </div>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const operative_id = document.getElementById('operative_id').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ operative_id, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    showMessage('Authentication failed: ' + (data.error || 'Invalid credentials'), 'error');
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message, 'error');
+            }
+        });
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

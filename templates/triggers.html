@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAEMON - TRIGGER MANAGEMENT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        
+        .nav-btn {
+            padding: 10px 20px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin-left: 10px;
+        }
+        
+        .nav-btn:hover {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .panel {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            padding: 30px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .panel h2 {
+            margin-bottom: 20px;
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 10px;
+        }
+        
+        .info-box {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .trigger-form {
+            margin-top: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .message {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        
+        .message.success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+        }
+        
+        .message.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+        }
+        
+        .message.warning {
+            background: rgba(255, 165, 0, 0.2);
+            border: 1px solid #ffaa00;
+            color: #ffaa00;
+        }
+        
+        .trigger-list {
+            margin-top: 20px;
+        }
+        
+        .trigger-card {
+            background: rgba(0, 255, 0, 0.05);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .trigger-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .trigger-id {
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        .trigger-status {
+            padding: 5px 10px;
+            border: 1px solid #00ff00;
+        }
+        
+        .trigger-status.active {
+            background: rgba(0, 255, 0, 0.2);
+        }
+        
+        .trigger-status.inactive {
+            background: rgba(255, 0, 0, 0.2);
+            border-color: #ff0000;
+            color: #ff0000;
+        }
+        
+        .trigger-details {
+            margin-top: 10px;
+            color: #88ff88;
+        }
+        
+        .example-triggers {
+            background: rgba(255, 255, 0, 0.1);
+            border: 1px solid #ffff00;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .example-triggers h3 {
+            color: #ffff00;
+            margin-bottom: 15px;
+        }
+        
+        .example-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .example-item:hover {
+            background: rgba(255, 255, 0, 0.2);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #00ff00;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>TRIGGER MANAGEMENT</h1>
+            <p>AI-POWERED AUTONOMOUS SYSTEM</p>
+        </div>
+        <div>
+            <a href="/dashboard" class="nav-btn">DASHBOARD</a>
+            <a href="/logout" class="nav-btn">DISCONNECT</a>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>CREATE NEW TRIGGER</h2>
+        
+        <div class="info-box">
+            <h3>HOW IT WORKS</h3>
+            <p>Describe your trigger in natural language. The AI will parse your description, validate it for safety, and create an autonomous trigger that will monitor conditions and execute actions.</p>
+            <br>
+            <p><strong>The trigger system uses Claude and OpenAI to:</strong></p>
+            <ul>
+                <li>Parse natural language descriptions into structured triggers</li>
+                <li>Evaluate complex conditions autonomously</li>
+                <li>Validate safety and ethics before activation</li>
+                <li>Generate appropriate actions when triggered</li>
+                <li>Make strategic decisions based on network state</li>
+            </ul>
+        </div>
+        
+        <div id="message" class="message"></div>
+        
+        <form id="triggerForm" class="trigger-form">
+            <div class="form-group">
+                <label for="trigger_description">TRIGGER DESCRIPTION:</label>
+                <textarea id="trigger_description" name="trigger_description" required 
+                          placeholder="Example: Every day at 9 AM, generate a new quest for network expansion..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn" id="submitBtn">
+                CREATE TRIGGER
+            </button>
+        </form>
+        
+        <div class="example-triggers">
+            <h3>EXAMPLE TRIGGERS (Click to Use)</h3>
+            <div class="example-item" onclick="useExample(this)">
+                When the number of active operatives exceeds 10, automatically create a high difficulty quest that requires team coordination
+            </div>
+            <div class="example-item" onclick="useExample(this)">
+                Every Monday at 8 AM, analyze network performance and generate a strategic planning report
+            </div>
+            <div class="example-item" onclick="useExample(this)">
+                If no quests have been completed in the last 24 hours, create easier introductory quests to engage new operatives
+            </div>
+            <div class="example-item" onclick="useExample(this)">
+                When total network reputation reaches a new milestone of 1000 points, send congratulatory messages to all operatives and unlock advanced quest tier
+            </div>
+            <div class="example-item" onclick="useExample(this)">
+                Daily at 6 PM, evaluate operative activity patterns and adjust quest availability based on engagement levels
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel">
+        <h2>ACTIVE TRIGGERS</h2>
+        <div id="triggerList" class="trigger-list">
+            <p style="text-align: center; padding: 20px;">Loading triggers...</p>
+        </div>
+    </div>
+    
+    <script>
+        function useExample(element) {
+            document.getElementById('trigger_description').value = element.textContent.trim();
+        }
+        
+        document.getElementById('triggerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const description = document.getElementById('trigger_description').value;
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="loading"></span> PROCESSING...';
+            
+            try {
+                const response = await fetch('/api/trigger/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ description })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(
+                        `TRIGGER CREATED SUCCESSFULLY<br>` +
+                        `Trigger ID: ${data.trigger_id}<br>` +
+                        `Status: ${data.status}<br><br>` +
+                        `${data.message}`,
+                        'success'
+                    );
+                    
+                    document.getElementById('triggerForm').reset();
+                    loadTriggers();
+                } else {
+                    showMessage('Failed to create trigger: ' + (data.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showMessage('Network error: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'CREATE TRIGGER';
+            }
+        });
+        
+        async function loadTriggers() {
+            try {
+                const response = await fetch('/api/triggers');
+                const data = await response.json();
+                
+                const container = document.getElementById('triggerList');
+                
+                if (data.triggers && data.triggers.length > 0) {
+                    container.innerHTML = data.triggers.map(trigger => `
+                        <div class="trigger-card">
+                            <div class="trigger-header">
+                                <span class="trigger-id">TRIGGER: ${trigger.trigger_id}</span>
+                                <span class="trigger-status ${trigger.active ? 'active' : 'inactive'}">
+                                    ${trigger.active ? 'ACTIVE' : 'INACTIVE'}
+                                </span>
+                            </div>
+                            <div class="trigger-details">
+                                <strong>Type:</strong> ${trigger.trigger_type.toUpperCase()}<br>
+                                <strong>Last Checked:</strong> ${trigger.last_checked || 'Never'}<br>
+                                <strong>Action:</strong> ${trigger.action_id}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = '<p style="text-align: center; padding: 20px;">No triggers configured yet.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading triggers:', error);
+            }
+        }
+        
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 10000);
+        }
+        
+        loadTriggers();
+        setInterval(loadTriggers, 30000);
+    </script>
+</body>
+</html>

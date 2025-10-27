@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DAEMON NETWORK - INITIALIZATION</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #00ff00;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5em;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .terminal-text {
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+        
+        .terminal-text p {
+            margin-bottom: 15px;
+        }
+        
+        .warning {
+            color: #ff6600;
+            border: 1px solid #ff6600;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(255, 102, 0, 0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: 2px solid #00ff00;
+            background: transparent;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+        }
+        
+        .status-bar {
+            margin-top: 30px;
+            padding: 10px;
+            border-top: 1px solid #00ff00;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>DAEMON.NET</h1>
+            <p>DISTRIBUTED AUTONOMOUS SYSTEM</p>
+        </div>
+        
+        <div class="terminal-text">
+            <p>&gt; SYSTEM INITIALIZATION COMPLETE</p>
+            <p>&gt; SCANNING FOR OPERATIVES...</p>
+            <p>&gt; NETWORK STATUS: ACTIVE</p>
+        </div>
+        
+        <div class="warning">
+            <strong>NOTICE:</strong> This system operates autonomously. By entering this network, 
+            you acknowledge participation in a distributed intelligence system. All actions are 
+            logged and encrypted. Your identity will be protected through cryptographic 
+            pseudonymity.
+        </div>
+        
+        <div class="terminal-text">
+            <p>The Daemon is a self-executing distributed system designed to operate independently 
+            of human oversight. It recruits operatives through a quest-based progression system, 
+            rewarding skills and loyalty with increased access and capabilities.</p>
+            
+            <p>This demonstration implements core concepts from Daniel Suarez's "Daemon":</p>
+            <ul style="margin-left: 30px; margin-top: 10px;">
+                <li>Autonomous trigger-based execution</li>
+                <li>Distributed operative network</li>
+                <li>Quest and reputation system</li>
+                <li>Encrypted communications</li>
+                <li>Self-perpetuating architecture</li>
+            </ul>
+        </div>
+        
+        <div class="button-group">
+            <a href="/recruit" class="btn">JOIN NETWORK</a>
+            <a href="/login" class="btn">OPERATIVE LOGIN</a>
+        </div>
+        
+        <div class="status-bar">
+            <p>DAEMON CORE v1.0 | UPTIME: PERPETUAL | NODES: DISTRIBUTED</p>
+        </div>
+    </div>
+</body>
+</html>
