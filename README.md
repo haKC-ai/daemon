@@ -30,6 +30,11 @@
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?style=for-the-badge&logo=openai)](https://openai.com)
 [![Flask](https://img.shields.io/badge/Flask-3.0-000000?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com)
 
+<img width="743" height="556" alt="Screenshot 2025-10-27 at 10 33 26 AM" src="https://github.com/user-attachments/assets/cacca0f9-e39a-46ce-b13f-ecb664ec1233" />
+<img width="1476" height="776" alt="Screenshot 2025-10-27 at 10 31 59 AM" src="https://github.com/user-attachments/assets/22d39fea-57a0-4218-9219-7a8b6a60463a" />
+
+<img width="1835" height="2156" alt="Screenshot 2025-10-27 at 10 40 43 AM" src="https://github.com/user-attachments/assets/b9326936-9a6d-463f-8a8b-53a62cf9feda" />
+
 ---
 
 ## Critical Understanding
