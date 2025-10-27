@@ -15,7 +15,7 @@ import openai
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv('.env')
+load_dotenv()
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -42,14 +42,14 @@ class AICore:
         else:
             logger.warning("No Claude API key found. Set ANTHROPIC_API_KEY in .env file")
         
+        # Store OpenAI key for later use (client created per-request with new API)
+        self.openai_key = openai_key
         if openai_key:
-            openai.api_key = openai_key
-            self.openai_client = openai
-            logger.info("OpenAI API initialized")
+            logger.info("OpenAI API key found")
         else:
             logger.warning("No OpenAI API key found. Set OPENAI_API_KEY in .env file")
         
-        if not self.claude_client and not self.openai_client:
+        if not self.claude_client and not self.openai_key:
             logger.error("No AI API keys configured! Please set up your .env file")
             logger.error("Copy .env.example to .env and add your API keys")
     
@@ -313,7 +313,7 @@ Respond in JSON format:
         try:
             if provider == 'claude' and self.claude_client:
                 return await self.query_claude(prompt, response_format)
-            elif provider == 'openai' and self.openai_client:
+            elif provider == 'openai' and self.openai_key:
                 return await self.query_openai(prompt, response_format)
             else:
                 logger.error(f"AI provider {provider} not available")
@@ -362,12 +362,18 @@ Respond in JSON format:
     async def query_openai(self, prompt: str, response_format: str = 'json') -> Any:
         """Query OpenAI API"""
         try:
+            from openai import OpenAI
+            
+            client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+            
+            messages = [
+                {"role": "system", "content": "You are an autonomous AI system managing a distributed network."},
+                {"role": "user", "content": prompt}
+            ]
+            
             kwargs = {
                 'model': self.config.get('openai_model', 'gpt-4-turbo-preview'),
-                'messages': [
-                    {"role": "system", "content": "You are an autonomous AI system managing a distributed network."},
-                    {"role": "user", "content": prompt}
-                ],
+                'messages': messages,
                 'temperature': self.config.get('temperature', 0.7),
                 'max_tokens': self.config.get('max_tokens', 4096)
             }
@@ -375,7 +381,7 @@ Respond in JSON format:
             if response_format == 'json':
                 kwargs['response_format'] = {"type": "json_object"}
             
-            response = self.openai_client.ChatCompletion.create(**kwargs)
+            response = client.chat.completions.create(**kwargs)
             response_text = response.choices[0].message.content
             
             if response_format == 'json':
